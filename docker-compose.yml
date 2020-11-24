@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - php-fpm
+    ports:
+      - '8000:80'
+
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+
+  mysqldb:
+    image: mariadb:10.4.15
+    hostname: "mysqldb"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpwd
+    volumes:
+      - mariadb:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  mariadb:
