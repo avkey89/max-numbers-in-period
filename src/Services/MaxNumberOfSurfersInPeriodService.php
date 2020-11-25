@@ -41,17 +41,21 @@ class MaxNumberOfSurfersInPeriodService
         $findResult = $this->visitRepository->findByPeriod($minDate, $maxDate);
         $maxCount = 0;
         if (!empty($findResult)) {
-            $currentCount = 0;
+            $enterCount = 0;
+            $current = 0;
+            $leaveCount = 0;
             foreach($findResult as $i=>$item) {
-                if ($item["movement"] == "-1") {
-                    $currentCount++;
-                    if ($currentCount > $maxCount) {
-                        $maxCount = $currentCount;
-                    }
-                } else {
-                    $currentCount--;
+                $current = $current + (int)$item["movement"];
+
+                if ($current < $leaveCount) {
+                    $leaveCount = $current;
+                }
+
+                if ($current > $enterCount) {
+                    $enterCount = $current;
                 }
             }
+            $maxCount = $enterCount - $leaveCount;
         }
 
         return ["status"=>"success", "value"=>$maxCount];
