@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Repository\VisitRepository;
+use DateTimeImmutable;
 
 class MaxNumberOfSurfersInPeriodService
 {
@@ -17,8 +18,8 @@ class MaxNumberOfSurfersInPeriodService
 
     public function handler($minDate, $maxDate)
     {
-        $minDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $this->prepareInputDate($minDate));
-        $maxDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $this->prepareInputDate($maxDate, 'max'));
+        $minDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $this->prepareInputDate($minDate));
+        $maxDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $this->prepareInputDate($maxDate, 'max'));
 
         $errorMessage = '';
         if ($minDate === false) {
